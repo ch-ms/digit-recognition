@@ -14,25 +14,11 @@ function [J grad] = backprop(nn_params, input_layer_size, ...
   J = costFn(Y, a3);
 
   % section: GRADIENT
-  % Deltas
-  DELTA1 = zeros(size(Theta1));
-  DELTA2 = zeros(size(Theta2));
+  delta3 = (a3 - Y)';
+  DELTA2 = delta3 * a2;
 
-  % For every example
-  for i = [1:m]
-    % ForwardProp
-    act_1 = a1(i, :);
-    act_2 = a2(i, :);
-    act_3 = a3(i, :);
-
-    % error terms
-    delta3 = (act_3 - Y(i, :))';
-    delta2 = (Theta2' * delta3) .* sigmoidGradient(z2(i, :)');
-
-    % grad for example
-    DELTA1 = DELTA1 + (delta2(2:end) * act_1);
-    DELTA2 = DELTA2 + (delta3 * act_2);
-  end
+  delta2 = (Theta2' * delta3) .* sigmoidGradient(z2');
+  DELTA1 = delta2(2:end, :) * a1;
 
   Theta1_grad = 1/m .* DELTA1;
   Theta2_grad = 1/m .* DELTA2;
