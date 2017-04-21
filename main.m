@@ -36,14 +36,15 @@ initial_nn_params = rollParams(initial_Theta1, initial_Theta2);
 % Test gradients
 if (testGrads)
   disp("Check gradient");
+  lambda = 0;
   testX = X(1, :);
   testY = Y(1, :);
   cfn = @(p) costFnByTheta(p, input_layer_size, hidden_layer_size, num_labels, ...
-   testX, testY);
+   testX, testY, lambda);
 
   testNumGrad = computeNumericalGradient(initial_nn_params, cfn);
   [testCost testRealGrad] = backprop(initial_nn_params, input_layer_size, ...
-   hidden_layer_size, num_labels, testX, testY, 0);
+   hidden_layer_size, num_labels, testX, testY, lambda);
 
   disp([testNumGrad testRealGrad]);
   diff = norm(testNumGrad-testRealGrad)/norm(testNumGrad+testRealGrad);
@@ -54,11 +55,11 @@ end
 
 % Learn
 disp("Learning");
-options = optimset('MaxIter', 50);
-lambda = 0.02;
+options = optimset('MaxIter', 200);
+lambda = 1;
 
 start_cost = costFnByTheta(initial_nn_params, input_layer_size, hidden_layer_size, ...
- num_labels, train_X, train_Y);
+ num_labels, train_X, train_Y, lambda);
 
 fprintf("Start cost: %i\n", start_cost);
 

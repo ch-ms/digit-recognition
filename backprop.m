@@ -11,7 +11,7 @@ function [J grad] = backprop(nn_params, input_layer_size, ...
   [z2, z3, a2, a3] = forwardprop(Theta1, Theta2, X);
 
   % section: COSTFN
-  J = costFn(Y, a3);
+  J = costFn(Y, a3, Theta1, Theta2, lambda);
 
   % section: GRADIENT
   delta3 = (a3 - Y)';
@@ -20,8 +20,11 @@ function [J grad] = backprop(nn_params, input_layer_size, ...
   delta2 = (Theta2' * delta3) .* sigmoidGradient(z2');
   DELTA1 = delta2(2:end, :) * a1;
 
-  Theta1_grad = 1/m .* DELTA1;
-  Theta2_grad = 1/m .* DELTA2;
+  Theta1_reg = [zeros(size(Theta1)(1), 1), lambda/m .* Theta1(:, 2:end)];
+  Theta2_reg = [zeros(size(Theta2)(1), 1), lambda/m .* Theta2(:, 2:end)];
+
+  Theta1_grad = ((1/m .* DELTA1) + Theta1_reg);
+  Theta2_grad = ((1/m .* DELTA2) + Theta2_reg);
 
   % grad for all examples
   grad = rollParams(Theta1_grad, Theta2_grad);
