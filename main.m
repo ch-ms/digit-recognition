@@ -10,8 +10,10 @@ m = size(X, 1);
 % Visualize
 sel = randperm(size(X, 1));
 sel = sel(1:100);
+v_X = X(sel, :);
+v_y = y(sel);
 
-visualize(X(sel, :));
+visualize(v_X);
 anykey;
 
 % Initialize
@@ -77,8 +79,17 @@ anykey;
 
 disp("Visualizing hidden layer");
 
+disp("Theta 1")
 visualize(Theta1(:, 2:end));
-anykey();
+
+% for exmpl = 1:size(X)(1)
+%   fprintf("Theta 1 for %i\n", v_y(exmpl));
+%   th1 = initial_Theta1(:, 2:end);
+%   visualize(th1 .* v_X(exmpl, :));
+%   anykey;
+% end
+
+anykey;
 
 % Predict
 pred_train = predict(Theta1, Theta2, train_X);
