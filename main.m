@@ -81,6 +81,10 @@ disp("Visualizing hidden layer");
 
 disp("Theta 1")
 visualize(Theta1(:, 2:end));
+anykey;
+
+disp("Theta 2");
+visualize(Theta2(:, 2:end));
 
 % for exmpl = 1:size(X)(1)
 %   fprintf("Theta 1 for %i\n", v_y(exmpl));
