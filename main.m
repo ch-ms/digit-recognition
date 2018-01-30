@@ -73,6 +73,9 @@ bp = @(p) backprop(p, input_layer_size, hidden_layer_size, num_labels, ...
 [Theta1 Theta2] = unrollParams(nn_params, input_layer_size, hidden_layer_size, ...
  num_labels);
 
+disp("Saved to learned.mat");
+save -binary learned.mat Theta1 Theta2;
+
 anykey;
 
 % Visualize hidden layer
@@ -86,7 +89,7 @@ anykey;
 disp("Theta 2");
 visualize(Theta2(:, 2:end));
 
-% for exmpl = 1:size(X)(1)
+% for exmpl = 1:size(v_X)(1)
 %   fprintf("Theta 1 for %i\n", v_y(exmpl));
 %   th1 = initial_Theta1(:, 2:end);
 %   visualize(th1 .* v_X(exmpl, :));
@@ -103,3 +106,13 @@ pred_cv = predict(Theta1, Theta2, cv_X);
 fprintf("Training set accuracy: %f\n", mean(double(pred_train == train_y)) * 100);
 fprintf("Test set accuracy: %f\n", mean(double(pred_test == test_y)) * 100);
 fprintf("CV set accuracy: %f\n", mean(double(pred_cv == cv_y)) * 100);
+
+perm = randperm(size(cv_X, 1));
+shuffle_X = cv_X(perm, :);
+shuffle_y = cv_y(perm);
+pred = predict(Theta1, Theta2, shuffle_X);
+for exmpl = 1:size(shuffle_X)(1)
+  visualize(shuffle_X(exmpl, :));
+  fprintf("Prediction %i(==%i?)\n",  pred(exmpl), shuffle_y(exmpl));
+  anykey;
+end
